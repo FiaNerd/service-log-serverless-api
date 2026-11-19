@@ -5,11 +5,9 @@ service: service-log-serverless-api
 
 provider:
   name: aws
+  region: eu-north-1
   runtime: python3.14
   architecture: arm64
-  # Uncomment to easily set up a custom domain. Read the docs for more details:
-  # https://www.serverless.com/framework/docs/providers/aws/guide/domains
-  # domain: api.example.com
 
 functions:
   hello:
