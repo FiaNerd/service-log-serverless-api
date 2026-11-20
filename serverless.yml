@@ -13,11 +13,17 @@ provider:
 
 functions:
   createService:
-    handler: functions/create-service/lambda_function.lambda_handler
+    handler: functions/create-service-logs/lambda_function.lambda_handler
     events:
       - httpApi:
           path: /services
           method: post
+  getService:
+    handler: functions/get-service-logs/lambda_function.lambda_handler
+    events:
+      - httpApi:
+          path: /services/{name}
+          method: get
 
 resources:
   Resources:
