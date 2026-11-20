@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+.serverless/
 
 # Virtual environments
 .venv/
@@ -11,6 +12,7 @@ ENV/
 # Environment variables & secrets
 .env
 .env.*
+!.env.example
 *.pem
 *.key
 
