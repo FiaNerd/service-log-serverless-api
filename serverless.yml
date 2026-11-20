@@ -13,7 +13,7 @@ provider:
 
 functions:
   createService:
-    handler: create_service.lambda_handler
+    handler: functions/create-service/lambda_function.lambda_handler
     events:
       - httpApi:
           path: /services
