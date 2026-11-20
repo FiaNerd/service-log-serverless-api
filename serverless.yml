@@ -1,6 +1,4 @@
-# "org" ensures this Service is used with the correct Serverless Framework Access Key.
 org: mattiassonsofia
-# "service" is the name of this project. This will also be added to your AWS resource names.
 service: service-log-serverless-api
 
 provider:
@@ -9,17 +7,17 @@ provider:
   runtime: python3.14
   architecture: arm64
   environment:
-    SERVICE_LOGS_TABLE: ${env:SERVICE_LOGS_TABLE}
+    SERVICE_LOGS_TABLE: ${env:SERVICE_LOGS_TABLE, 'service-logs-db'}
   iam:
     role: arn:aws:iam::${env:AWS_ACCOUNT_ID}:role/${env:LAMBDA_ROLE_NAME}
 
 functions:
-  hello:
-    handler: handler.hello
+  createService:
+    handler: create_service.lambda_handler
     events:
       - httpApi:
-          path: /
-          method: get
+          path: /services
+          method: post
 
 resources:
   Resources:
