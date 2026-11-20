@@ -8,90 +8,12 @@
         "LogGroupName": "/aws/lambda/service-log-serverless-api-dev-hello"
       }
     },
-    "IamRoleLambdaExecution": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Version": "2012-10-17",
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Principal": {
-                "Service": [
-                  "lambda.amazonaws.com"
-                ]
-              },
-              "Action": [
-                "sts:AssumeRole"
-              ]
-            }
-          ]
-        },
-        "Policies": [
-          {
-            "PolicyName": {
-              "Fn::Join": [
-                "-",
-                [
-                  "service-log-serverless-api",
-                  "dev",
-                  "lambda"
-                ]
-              ]
-            },
-            "PolicyDocument": {
-              "Version": "2012-10-17",
-              "Statement": [
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:CreateLogStream",
-                    "logs:CreateLogGroup",
-                    "logs:TagResource"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/service-log-serverless-api-dev*:*"
-                    }
-                  ]
-                },
-                {
-                  "Effect": "Allow",
-                  "Action": [
-                    "logs:PutLogEvents"
-                  ],
-                  "Resource": [
-                    {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/service-log-serverless-api-dev*:*:*"
-                    }
-                  ]
-                }
-              ]
-            }
-          }
-        ],
-        "Path": "/",
-        "RoleName": {
-          "Fn::Join": [
-            "-",
-            [
-              "service-log-serverless-api",
-              "dev",
-              {
-                "Ref": "AWS::Region"
-              },
-              "lambdaRole"
-            ]
-          ]
-        }
-      }
-    },
     "HelloLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
         "Code": {
           "S3Bucket": "serverless-framework-deployments-eu-north-1-8169fa45-e745",
-          "S3Key": "serverless/service-log-serverless-api/dev/1795104469192-2026-11-19T16:07:49.192Z/service-log-serverless-api.zip"
+          "S3Key": "serverless/service-log-serverless-api/dev/1795192855036-2026-11-20T16:40:55.036Z/service-log-serverless-api.zip"
         },
         "Handler": "handler.hello",
         "Runtime": "python3.14",
@@ -101,25 +23,20 @@
         "Architectures": [
           "arm64"
         ],
-        "Role": {
-          "Fn::GetAtt": [
-            "IamRoleLambdaExecution",
-            "Arn"
-          ]
-        }
+        "Role": "arn:aws:iam::064338743132:role/service-log-serverless-api-lambda-role"
       },
       "DependsOn": [
         "HelloLogGroup"
       ]
     },
-    "HelloLambdaVersionmsOXwTMJEZ1govissZnHiaaLodM7iGXWE7jT7BWDU4": {
+    "HelloLambdaVersionwF9o6NBPMApaSCT3CJ6fEh4h8USfBXdVyvBLeKPJN58": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HelloLambdaFunction"
         },
-        "CodeSha256": "RUHqdf3EtrWp3x2ebzeNTPLiRMhz5EWJx5SnF6tbinU="
+        "CodeSha256": "NnBX9HLtdXLNmZ9GGzHLlSV2V5fZ2FaNtXU2/pcx3O0="
       }
     },
     "HttpApi": {
@@ -216,6 +133,33 @@
         }
       },
       "DependsOn": "HttpApiIntegrationHello"
+    },
+    "serviceLogDb": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "service-logs-db",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "pk",
+            "AttributeType": "S"
+          },
+          {
+            "AttributeName": "sk",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "pk",
+            "KeyType": "HASH"
+          },
+          {
+            "AttributeName": "sk",
+            "KeyType": "RANGE"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
     }
   },
   "Outputs": {
@@ -228,7 +172,7 @@
     "HelloLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HelloLambdaVersionmsOXwTMJEZ1govissZnHiaaLodM7iGXWE7jT7BWDU4"
+        "Ref": "HelloLambdaVersionwF9o6NBPMApaSCT3CJ6fEh4h8USfBXdVyvBLeKPJN58"
       },
       "Export": {
         "Name": "sls-service-log-serverless-api-dev-HelloLambdaFunctionQualifiedArn"

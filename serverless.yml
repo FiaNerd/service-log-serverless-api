@@ -8,6 +8,10 @@ provider:
   region: eu-north-1
   runtime: python3.14
   architecture: arm64
+  environment:
+    SERVICE_LOGS_TABLE: ${env:SERVICE_LOGS_TABLE}
+  iam:
+    role: arn:aws:iam::${env:AWS_ACCOUNT_ID}:role/${env:LAMBDA_ROLE_NAME}
 
 functions:
   hello:
@@ -16,3 +20,22 @@ functions:
       - httpApi:
           path: /
           method: get
+
+resources:
+  Resources:
+    serviceLogDb:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: service-logs-db
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+
+        BillingMode: PAY_PER_REQUEST
