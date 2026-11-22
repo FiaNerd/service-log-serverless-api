@@ -30,6 +30,12 @@ functions:
       - httpApi:
           path: /services/{name}/items/{itemId}
           method: patch
+  removeService:
+    handler: functions/remove-service-logs/lambda_function.lambda_handler
+    events:
+      - httpApi:
+          path: /services/{name}/items/{itemId}
+          method: delete
 
 resources:
   Resources:
