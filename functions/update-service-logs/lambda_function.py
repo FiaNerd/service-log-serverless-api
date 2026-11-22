@@ -2,6 +2,7 @@ from datetime import datetime, timezone
 import json
 from utils.db import get_table
 from utils.responses import json_response
+from botocore.exceptions import ClientError
 
 VALID_PRIORITIES = {"low", "medium", "high"}
 VALID_STATUSES = {"OPEN", "IN_PROGRESS", "RESOLVED", "CLOSED"}

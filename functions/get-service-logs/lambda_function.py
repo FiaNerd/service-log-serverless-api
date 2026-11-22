@@ -23,11 +23,23 @@ def lambda_handler(event, context):
 
     print(json.dumps(response, default=str))
 
+    items = response.get("Items", [])
+    if not items:
+        return json_response(
+            404,
+            {
+                "success": False,
+                "service": service_name,
+                "error": "No items found for service",
+                "items": [],
+            },
+        )
+
     return json_response(
         200,
         {
             "success": True,
             "service": service_name,
-            "items": response.get("Items", []),
+            "items": items,
         },
     )

@@ -5,7 +5,9 @@ import uuid
 import boto3
 
 dynamodb = boto3.resource("dynamodb")
-TABLE_NAME = os.environ.get("TABLE_NAME", "service-logs-db")
+TABLE_NAME = os.environ.get("SERVICE_LOGS_TABLE") or os.environ.get(
+    "TABLE_NAME", "service-logs-db"
+)
 table = dynamodb.Table(TABLE_NAME)
 
 
